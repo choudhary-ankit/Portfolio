@@ -1,0 +1,91 @@
+.body{
+    background-color: black;
+    width: 100%;
+    height: 680px;
+    padding-bottom: 50px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: white;
+}
+.circal_arrng{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 80%;
+    margin-top: 20px;
+}
+.text{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+}
+.circal_one{
+    background-color:rgb(200, 242, 238);
+    width: 200px;
+    height: 200px;
+    border: solid rgb(6, 190, 182) 20px;
+    border-radius: 50%;
+    text-align: center;
+    color: black;
+
+}
+.circal_two{
+    background-color:rgb(200, 242, 238);
+    width: 200px;
+    height: 200px;
+    border: solid yellow 20px;
+    border-radius: 50%;
+    text-align: center;
+    color: black;
+
+}
+.circal_three{
+    background-color:rgb(200, 242, 238);
+    width: 200px;
+    height: 200px;
+    border: solid green 20px;
+    border-radius: 50%;
+    text-align: center;
+    color: black;
+
+}
+.github_calender{
+    width: 80%;
+    height: auto;
+    padding: 10px;
+    background-color: white;
+    color: black;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-radius: 25px;
+}
+@media only screen and (max-width: 600px){
+    .body{
+        height: auto;
+    }
+    .circal_arrng{
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        text-align: center;
+        width: 80%;
+        margin-top: 80px;
+    }
+}
+@media only screen and (max-width: 800px){
+    .body{
+        height: auto;
+    }
+    .circal_arrng{
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        text-align: center;
+        width: 80%;
+        margin-top: 80px;
+    }
+}
