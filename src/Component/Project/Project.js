@@ -28,8 +28,10 @@ export default class Project extends Component {
                                                 image={e.img}
                                             />
                                             <CardContent className={Style.card_content}>
-                                                <Typography gutterBottom variant="h5" component="h2">{e.Tital}</Typography>
-                                                <Typography variant="body2" color="textSecondary" component="p">{e.Discription}</Typography>
+                                                <div className={Style.card_title_dis}>
+                                                    <Typography gutterBottom variant="h5" component="h2">{e.Tital}</Typography>
+                                                    <Typography variant="body2" color="textSecondary" component="p">{e.Discription}</Typography>
+                                                </div>
                                                 <div className={Style.card_content_skilldiv}>
                                                     {
                                                         e.skils.map((j)=>{
