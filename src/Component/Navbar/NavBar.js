@@ -40,6 +40,7 @@ export default class NavBar extends Component {
                             </div>
                             <div className={Style.ppp_arrange}>
                                 <a href="#proficiencies" className={Style.btn}>Proficiencies</a>
+                                <a href="#skills" className={Style.btn}>Skills</a>
                                 <a href="#project" className={Style.btn}>Project</a>
                                 <a href="#performance" className={Style.btn}>performance</a>
                                 <a href="#interest" className={Style.btn}>Interest</a>
@@ -63,6 +64,9 @@ export default class NavBar extends Component {
                                             <div classname={Style.drawer_ppp}>
                                                 <div>
                                                     <a href="#proficiencies" className={Style.btn} onClick={this.TopDrawerClose}>Proficiencies</a>
+                                                </div>
+                                                <div style={{marginTop:"40px"}}>
+                                                    <a href="#skills" className={Style.btn} onClick={this.TopDrawerClose}>Skills</a>
                                                 </div>
                                                 <div style={{marginTop:"40px"}}>
                                                     <a href="#project" className={Style.btn} onClick={this.TopDrawerClose}>Project</a>

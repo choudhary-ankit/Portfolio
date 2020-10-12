@@ -21,35 +21,36 @@ export default class Project extends Component {
                         {
                             Card_details.map((e)=>{
                                 return(
-                                    <Card className={Style.root}>
-                                        <CardActionArea >
-                                            <CardMedia
-                                                className={Style.media}
-                                                image={e.img}
-                                            />
-                                            <CardContent className={Style.card_content}>
-                                                <div className={Style.card_title_dis}>
-                                                    <Typography gutterBottom variant="h5" component="h2">{e.Tital}</Typography>
-                                                    <Typography variant="body2" color="textSecondary" component="p">{e.Discription}</Typography>
+                                    <Card className={Style.card}>
+                                        <div className={Style.box}>
+                                            <img src={e.img} className={Style.img}></img>
+                                            <div className={Style.contentbox}>
+                                                <div className={Style.contentdiv}>
+                                                    <h5>{e.Tital}</h5>
+                                                    <div className={Style.discripton}>
+                                                        <p >{e.Discription}</p>
+                                                    </div>
+                                                    <div className={Style.skill_div}>
+                                                        {
+                                                            e.skils.map((f)=>{
+                                                                return(
+                                                                    <img src={f} className={Style.skill_img}></img>
+                                                                )
+                                                            })
+                                                        }
+                                                    </div>
+                                                    <div className={Style.btn_div}>
+                                                        <a href={e.sites} style={{textDecoration:"none"}}>
+                                                            <Button variant="outlined" color="secondary" size="large" style={{fontFamily: 'cursive'}}>Demo</Button>
+                                                        </a>
+                                                        <a href={e.github} style={{textDecoration:"none"}}>
+                                                            <Button variant="contained" color="secondary" size="large" style={{fontFamily: 'cursive'}}>Github</Button>
+                                                        </a>
+                                                    </div>
                                                 </div>
-                                                <div className={Style.card_content_skilldiv}>
-                                                    {
-                                                        e.skils.map((j)=>{
-                                                            return(
-                                                                <div className={Style.card_content_skill}>
-                                                                    <p style={{color:"black"}}>{j}</p>
-                                                                </div>
-                                                            )
-                                                        })
-                                                    }
-                                                </div>
-                                            </CardContent>
-                                        </CardActionArea>
-                                        <CardActions className={Style.cardaction}>
-                                            <a href={e.sites} className={Style.btn}>Go to Sites</a>
-                                            <a href={e.github}className={Style.btn}>Go to Github</a>
-                                        </CardActions>
-                                    </Card>
+                                            </div>
+                                        </div>
+                                </Card>
                                 )
                             })
                         }

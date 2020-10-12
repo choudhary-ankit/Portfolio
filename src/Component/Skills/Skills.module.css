@@ -1,0 +1,112 @@
+.body{
+    background-color: black;
+    width: 100%;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: white;
+    font-family: 'Sansita Swashed', cursive;
+    padding-bottom: 50px;
+}
+.img_arrng{
+    width: 80%;
+    height: auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 100px;
+}
+.skills_two{
+    margin-top: 100px;
+    width: 80%;
+    height: auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+.img_text{
+    text-align: center;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.img_sizee{
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+}
+.img_size{
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    transition: transform .2s;
+}
+.img_size:hover{
+    transform: scale(2.0);
+    transition: 0.3s ease-in;
+}
+@media only screen and (max-width: 600px){
+    .img_arrng{
+        width: 80%;
+        height: auto;
+        display: grid;
+        grid-template-columns: 20% 20% 20% 20%;
+        grid-template-rows: 50% 50%;
+        grid-row-gap: 30px;
+        padding-top: 30px;
+    }
+    .img_size{
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        transition: none;
+    }
+    .img_size:hover{
+        transform: scale(1.5);
+        transition: 0.3s ease-in;
+    }
+    .skills_two{
+        margin-top: 50px;
+        width: 80%;
+        height: auto;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+}
+@media only screen and (max-width: 910px){
+    .img_arrng{
+        width: 80%;
+        height: auto;
+        display: grid;
+        grid-template-columns: 20% 20% 20% 20%;
+        grid-template-rows: 50% 50%;
+        grid-row-gap: 30px;
+        padding-top: 30px;
+    }
+    .img_size{
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        transition: none;
+    }
+    .img_size:hover{
+        transform: scale(1.5);
+        transition: 0.3s ease-in;
+    }
+    .skills_two{
+        margin-top: 50px;
+        width: 80%;
+        height: auto;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+}

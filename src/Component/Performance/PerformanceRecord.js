@@ -17,7 +17,7 @@ export default class PerformanceRecord extends Component {
                                 <h1 style={{marginTop:"80px"}}>1000+</h1>
                             </div>
                             <div>
-                                <h1>Hours of Coding</h1>
+                                <h2>Hours of Coding</h2>
                             </div>
                         </div>
                         <div className={Style.text}>
@@ -25,15 +25,15 @@ export default class PerformanceRecord extends Component {
                                 <h1 style={{marginTop:"80px"}}>200+</h1>
                             </div>
                             <div>
-                                <h1>Hackerrank Problem</h1>
+                                <h2>Hackerrank Problem</h2>
                             </div>
                         </div>
                         <div className={Style.text}>
                             <div className={Style.circal_three}>
-                                <h1 style={{marginTop:"80px"}}>220+</h1>
+                                <h1 style={{marginTop:"80px"}}>250+</h1>
                             </div>
                             <div>
-                                <h1>Git Commits</h1>
+                                <h2>Git Commits</h2>
                             </div>
                         </div>
                     </div>
