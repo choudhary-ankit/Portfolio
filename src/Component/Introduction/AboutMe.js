@@ -26,7 +26,7 @@ export default class AboutMe extends Component {
                             <a href="https://www.linkedin.com/in/ankit-choudhary-522aa6122/"><img src="./Collection/linkdin.png" className={Style.social_img_size}></img></a>
                             <a href="https://twitter.com/ankitchoudhar39"><img src="./Collection/twiteer.png" className={Style.social_img_size}></img></a>
                             <a href="https://www.hackerrank.com/dhackdecoder"><img src="./Collection/hacker.png" className={Style.social_img_size}></img></a>
-                            <a href="https://drive.google.com/file/d/1iATCix35CTyxmm_gouo1t4EjxX4u2X51/view?usp=sharing">
+                            <a href="https://drive.google.com/file/d/1UvKzrWWTwE8a4NfZ890WwvgyUyaCDCYK/view">
                                 <button className={Style.resume_btn}>Resume</button>
                             </a>
                         </div>
