@@ -1,6 +1,5 @@
 {
   "name": "profile",
-  "homepage": "https://choudhary-ankit.github.io/Portfolio",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -21,8 +20,6 @@
     "smooth-scroll-anchor": "^1.2.5"
   },
   "scripts": {
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d build",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
