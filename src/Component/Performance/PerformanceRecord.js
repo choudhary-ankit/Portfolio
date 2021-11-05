@@ -4,6 +4,7 @@ import GitHubCalendar from 'react-github-calendar';
 import ReactTooltip from 'react-tooltip';
 
 export default class PerformanceRecord extends Component {
+
     render() {
         return (
             <div id="performance">
@@ -39,7 +40,7 @@ export default class PerformanceRecord extends Component {
                     </div>
                     <div className={Style.github_calender}>
                         <div>
-                            <GitHubCalendar username="choudhary-ankit">
+                            <GitHubCalendar username="choudhary-ankit" year={new Date().getFullYear()}>
                                 <ReactTooltip delayShow={50} html />
                             </GitHubCalendar>
                             <p>Summary of pull requests, issues opened, and commits made by <a href="https://github.com/choudhary-ankit">@choudhary-ankit</a></p>
