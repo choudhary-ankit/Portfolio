@@ -1,6 +1,6 @@
 ---
 import Tags from './Tags.astro';
-// TODO(Ankit): confirm these diagrams match how the systems really work and that this level of Spyne detail is OK to publish.
+// Diagrams are deliberately rough (LLD-level shape only): no internal service, table or client names.
 ---
 <section id="work" class="wrap" aria-labelledby="work-h">
   <h2 class="h2" id="work-h">Selected work</h2>
@@ -15,8 +15,9 @@ import Tags from './Tags.astro';
       </div>
       <div>
         <p style="font-size:.86rem;margin-bottom:8px">SMS follow-up flow I designed for inconclusive calls</p>
-        <div class="flow" role="img" aria-label="Call ends, eligibility gates, EventBridge debounce, eligibility API, SMS via Twilio, Kafka to ClickHouse audit"><span class="v">Call ends</span><i>→</i><span>Eligibility gates</span><i>→</i><span class="k">EventBridge debounce</span><i>→</i><span>Eligibility API</span><i>→</i><span class="v">SMS via Twilio</span><i>→</i><span class="k">Kafka → ClickHouse audit</span></div>
-        <dl><dt>State</dt><dd>DynamoDB / Redis key-value store</dd><dt>Goal</dt><dd>Follow up automatically on calls that ended without an outcome</dd></dl>
+        <div class="flow" role="img" aria-label="Call ends, post-call evaluation, eligibility gates for intent, consent and a 24-hour cap, a debounced EventBridge schedule, a consent re-check at send time, then SMS via Twilio; every decision is audited through Kafka into ClickHouse"><span class="v">Call ends</span><i>→</i><span>Post-call evaluation</span><i>→</i><span>Eligibility gates: intent, consent, 24h cap</span><i>→</i><span class="k">EventBridge schedule (debounced)</span><i>→</i><span>Consent re-check at send</span><i>→</i><span class="v">SMS via Twilio</span></div>
+        <div class="flow"><span class="k">Every decision → Kafka → ClickHouse audit</span></div>
+        <dl><dt>State</dt><dd>One decision record per call: status and skip reason</dd><dt>Goal</dt><dd>Follow up automatically on calls that ended without an outcome</dd></dl>
       </div>
     </article>
   </div>
@@ -26,15 +27,17 @@ import Tags from './Tags.astro';
         <span class="m-sys">Architected</span>
         <h3>AI image-processing orchestration</h3>
         <dl>
-          <dt>Challenge</dt><dd>Large image batches from 100 enterprises were processed slowly and queued behind each other.</dd>
+          <dt>Challenge</dt><dd>Large image batches from 100+ enterprises were processed slowly and queued behind each other.</dd>
           <dt>Approach</dt><dd>Rebuilt the core flow as AWS Step Functions workflows, so each processing stage runs as a managed, observable step and batches scale out instead of waiting.</dd>
         </dl>
         <Tags tags={['AWS Step Functions', 'SQS', 'Node.js']} />
       </div>
-      <div class="diagram" role="img" aria-label="Diagram: image batch into a Step Functions workflow, parallel processing steps, then QC and delivery">
-        <div class="dn">Image batch</div><div class="dar"></div>
+      <div class="diagram" role="img" aria-label="Diagram: pending SKUs are grouped by a batch former, written as a manifest to S3, run through a Step Functions workflow of parallel ML steps, then go to QC and delivery">
+        <div class="dn">Pending SKUs</div><div class="dar"></div>
+        <div class="dn">Batch former<small>flush when full or when the oldest item waits too long</small></div><div class="dar"></div>
+        <div class="dn s">Batch manifest in S3</div><div class="dar"></div>
         <div class="dn k">Step Functions workflow</div><div class="dar"></div>
-        <div class="drow"><div class="dn s">Process</div><div class="dn s">Process</div><div class="dn s">Process</div></div><div class="dar"></div>
+        <div class="drow"><div class="dn s">ML step</div><div class="dn s">ML step</div><div class="dn s">ML step</div></div><div class="dar"></div>
         <div class="dn">QC &amp; delivery</div>
       </div>
     </article>
@@ -49,11 +52,14 @@ import Tags from './Tags.astro';
         </dl>
         <Tags tags={['Microservices', 'Kafka', 'MongoDB']} />
       </div>
-      <div class="diagram" role="img" aria-label="Diagram: one sequential monolith split into image, video and 360 services running in parallel">
+      <div class="diagram" role="img" aria-label="Diagram: a sequential monolith replaced by a media orchestrator and pre-processing step that fan out to image, video and 360 services, which report back through status events">
         <span class="dlabel">Before</span>
-        <div class="dn old">Monolith: images, then video, then 360°</div><div class="dar"></div>
+        <div class="dn old">Monolith: images, then video, then 360°</div>
         <span class="dlabel">After</span>
-        <div class="drow"><div class="dn k">Image service</div><div class="dn k">Video service</div><div class="dn k">360° service</div></div>
+        <div class="dn">Media orchestrator<small>one media record per vehicle</small></div><div class="dar"></div>
+        <div class="dn s">Pre-processing<small>classify assets, extract frames</small></div><div class="dar"></div>
+        <div class="drow"><div class="dn k">Image service</div><div class="dn k">Video service</div><div class="dn k">360° service</div></div><div class="dar"></div>
+        <div class="dn">Status events<small>Kafka / SQS</small></div>
       </div>
     </article>
 
@@ -67,12 +73,13 @@ import Tags from './Tags.astro';
         </dl>
         <Tags tags={['Event-driven', 'Kafka', 'Redis']} />
       </div>
-      <div class="diagram" role="img" aria-label="Diagram: many step events collected into one webhook per SKU">
+      <div class="diagram" role="img" aria-label="Diagram: step events are collected and de-duplicated per SKU, a per-client trigger rule decides when to send, and one webhook per SKU goes to the client with logged, capped retries">
         <div class="dots"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
         <span class="dlabel c">Step events</span><div class="dar"></div>
-        <div class="dn k">Collect &amp; de-duplicate</div><div class="dar"></div>
+        <div class="dn k">Collect &amp; de-duplicate per SKU<small>wait until every asset is done</small></div><div class="dar"></div>
+        <div class="dn">Per-client trigger rule<small>on SKU done or QC done</small></div><div class="dar"></div>
         <div class="dn">One webhook per SKU</div><div class="dar"></div>
-        <div class="dn s">Client server</div>
+        <div class="drow"><div class="dn s">Client server</div><div class="dn side">Delivery log &amp; capped retries</div></div>
       </div>
     </article>
 
@@ -86,11 +93,13 @@ import Tags from './Tags.astro';
         </dl>
         <Tags tags={['Observability', 'Retries', 'AWS']} />
       </div>
-      <div class="diagram" role="img" aria-label="Diagram: workflow step, failure detected, retried automatically, with monitoring and alerts">
+      <div class="diagram" role="img" aria-label="Diagram: a failed or timed-out workflow step is found by a reconciler, classified and queued, then retried or released so the job completes, with monitoring and alerts alongside">
         <div class="dn">Workflow step</div><div class="dar"></div>
-        <div class="dn old">Failure detected</div><div class="dar"></div>
-        <div class="dn k">Retry strategy</div><div class="dar"></div>
-        <div class="drow"><div class="dn">Job completes</div><div class="dn s">Monitoring &amp; alerts</div></div>
+        <div class="dn old">Failure or timeout</div><div class="dar"></div>
+        <div class="dn">Reconciler<small>finds stale runs, classifies the failure</small></div><div class="dar"></div>
+        <div class="dn s">Failure queue (SQS)</div><div class="dar"></div>
+        <div class="dn k">Retry strategy<small>retry or release the job</small></div><div class="dar"></div>
+        <div class="drow"><div class="dn">Job completes</div><div class="dn side">Monitoring &amp; alerts</div></div>
       </div>
     </article>
   </div>

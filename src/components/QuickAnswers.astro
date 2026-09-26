@@ -1,11 +1,11 @@
 ---
-// TODO(Ankit): confirm wording, especially the career-switch answer.
+// Every fact here also appears elsewhere on the page (Impact, Journey, Work). Keep them in sync.
 const qa = [
-  ['What are you working on right now?', "I'm building Vini at Spyne, an LLM-powered agent that handles car dealership sales and service conversations over phone calls and SMS, connected to the dealer's inventory and CRM. Recently I designed its automated SMS follow-up for calls that end without a clear outcome."],
-  ["What's your biggest technical win?", 'Re-architecting our AI image-processing orchestration on AWS Step Functions. Processing time dropped from 90 to 30 minutes while handling around a million images concurrently across 100 enterprises.'],
-  ['What kind of role are you looking for?', 'Backend, distributed systems or applied AI/LLM roles, where I can own services end to end and work on problems where scale and reliability matter.'],
-  ['Have you led a team?', "Yes. At Acadza I built and led a team of six engineers while shipping the company's first production platform, mentoring them on delivery, debugging and scalable frontend practices."],
-  ['Why did you switch from mechanical engineering?', 'After graduating in mechanical engineering, I taught myself to code and joined Acadza as a software engineer in 2021. The engineering mindset carried over: I still think in terms of throughput, failure modes and what happens under load.'],
+  ['What are you working on right now?', "I'm building Vini at Spyne: an LLM agent that answers car-dealership sales and service calls and texts, with live access to the dealer's inventory and CRM. Most recently I designed its automated SMS follow-up for calls that end without an outcome, using eligibility gates, a debounced EventBridge schedule and a Kafka to ClickHouse audit trail."],
+  ["What's your biggest technical win?", 'Rebuilding our AI image-processing pipeline on AWS Step Functions. Large batches went from 90 minutes to 30 (66% faster), with around a million images processed concurrently for 100+ enterprise clients. Alongside it, better monitoring and retries brought the pipeline failure rate from 7% to under 1%.'],
+  ['What kind of role are you looking for?', 'Backend, distributed systems or applied AI (LLM) roles where I own services end to end, from design through running them in production. I do my best work on problems where scale and reliability matter: event-driven systems, media pipelines and agents that have to hold up under real load.'],
+  ['Have you led a team?', "Yes. At Acadza I built and led a team of six engineers while shipping the company's first production platform from scratch. I mentored them on delivery, debugging and scalable frontend practices, and created the internal Next.js / Redux framework the team built on."],
+  ['Why did you switch from mechanical engineering?', 'I studied mechanical engineering (B.Tech, 2014 to 2018), taught myself to code, and joined Acadza as a software engineer in 2021. The engineering mindset came with me: I still think in terms of throughput, failure modes and what happens under load, just in distributed systems instead of machines.'],
 ];
 ---
 <section id="ask" class="wrap" aria-labelledby="ask-h">
