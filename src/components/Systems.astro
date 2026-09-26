@@ -9,23 +9,35 @@
         <div class="chip"><b>&lt;1%</b><span>pipeline failure rate</span></div>
       </div>
     </div>
-    <figure class="pipe" aria-label="Animated diagram of the systems I work on: dealer photos, calls and SMS flow through Kafka into an image pipeline and the Vini LLM agent">
+    <figure class="pipe" aria-label="Animated diagram of the systems I work on: dealer photos, calls and SMS enter a Kafka event stream. In the media lane an orchestrator and batch former feed Step Functions ML steps that produce studio images with QC and one webhook per SKU. In the conversation lane Vini, an LLM agent, calls tools against the dealer's inventory and CRM, and a post-call evaluation schedules a follow-up SMS through EventBridge. Everything is audited in ClickHouse.">
       <div class="pipe-head"><span>Data flow</span><span class="live">running</span></div>
-      <svg viewBox="0 0 600 360" aria-hidden="true">
+      <svg viewBox="0 0 624 378" aria-hidden="true">
+        <rect class="lane" x="162" y="14" width="458" height="140" rx="12"/><text class="lane-l" x="174" y="34">MEDIA PIPELINE</text>
+        <rect class="lane" x="162" y="164" width="458" height="162" rx="12"/><text class="lane-l" x="174" y="181">CONVERSATIONS</text>
         <g>
-          <path class="wire" id="r1" d="M100 60 C135 60 125 180 160 180 L270 180 C305 180 295 95 330 95 L440 95 L500 95"/>
-          <path class="wire" id="r2" d="M100 180 L270 180 C305 180 295 265 330 265 L440 265 L500 265"/>
-          <path class="wire" id="r3" d="M100 300 C135 300 125 180 160 180 L270 180 C305 180 295 265 330 265 L440 265 L500 265"/>
+          <path class="wire" id="r1" d="M96 80 H562"/>
+          <path class="wire" id="r2" d="M96 212 H220 V290 H562"/>
+          <path class="wire" id="r3" d="M96 290 H130 V212 H505"/>
+          <path class="wire dash" d="M450 106 V118"/>
+          <path class="wire dash" d="M146 354 H172"/>
         </g>
         <g id="packets"></g>
-        <g class="node"><rect x="0" y="38" width="100" height="44" rx="9"/><text x="50" y="57" text-anchor="middle">Dealer photos</text><text class="s" x="50" y="72" text-anchor="middle">images, video</text></g>
-        <g class="node"><rect x="0" y="158" width="100" height="44" rx="9"/><text x="50" y="177" text-anchor="middle">Voice calls</text><text class="s" x="50" y="192" text-anchor="middle">LiveKit</text></g>
-        <g class="node"><rect x="0" y="278" width="100" height="44" rx="9"/><text x="50" y="297" text-anchor="middle">SMS</text><text class="s" x="50" y="312" text-anchor="middle">Twilio</text></g>
-        <g class="node core"><rect x="160" y="152" width="110" height="56" rx="10"/><text x="215" y="176" text-anchor="middle">Kafka</text><text class="s" x="215" y="192" text-anchor="middle">event stream</text></g>
-        <g class="node core"><rect x="330" y="67" width="110" height="56" rx="10"/><text x="385" y="91" text-anchor="middle">Step Functions</text><text class="s" x="385" y="107" text-anchor="middle">image pipeline</text></g>
-        <g class="node ai"><rect x="330" y="237" width="110" height="56" rx="10"/><text x="385" y="261" text-anchor="middle">Vini</text><text class="s" x="385" y="277" text-anchor="middle">LLM agent</text></g>
-        <g class="node"><rect x="500" y="73" width="100" height="44" rx="9"/><text x="550" y="92" text-anchor="middle">Studio images</text><text class="s" x="550" y="107" text-anchor="middle">100+ enterprises</text></g>
-        <g class="node"><rect x="500" y="243" width="100" height="44" rx="9"/><text x="550" y="262" text-anchor="middle">Dealer CRM</text><text class="s" x="550" y="277" text-anchor="middle">inventory, leads</text></g>
+        <g class="node"><rect x="0" y="58" width="96" height="44" rx="9"/><text x="48" y="77" text-anchor="middle">Dealer photos</text><text class="s" x="48" y="92" text-anchor="middle">images, video</text></g>
+        <g class="node"><rect x="0" y="190" width="96" height="44" rx="9"/><text x="48" y="209" text-anchor="middle">Voice calls</text><text class="s" x="48" y="224" text-anchor="middle">LiveKit</text></g>
+        <g class="node"><rect x="0" y="268" width="96" height="44" rx="9"/><text x="48" y="287" text-anchor="middle">SMS</text><text class="s" x="48" y="302" text-anchor="middle">Twilio</text></g>
+        <g class="node"><rect x="172" y="58" width="96" height="44" rx="9"/><text x="220" y="77" text-anchor="middle">Orchestrator</text><text class="s" x="220" y="92" text-anchor="middle">classify, frames</text></g>
+        <g class="node"><rect x="286" y="58" width="96" height="44" rx="9"/><text x="334" y="77" text-anchor="middle">Batch former</text><text class="s" x="334" y="92" text-anchor="middle">S3 manifest</text></g>
+        <g class="node core"><rect x="400" y="54" width="100" height="52" rx="9"/><text x="450" y="77" text-anchor="middle">Step Functions</text><text class="s" x="450" y="92" text-anchor="middle">parallel ML steps</text></g>
+        <g class="node"><rect x="514" y="58" width="96" height="44" rx="9"/><text x="562" y="77" text-anchor="middle">Studio images</text><text class="s" x="562" y="92" text-anchor="middle">QC + webhooks</text></g>
+        <g class="node ai"><rect x="172" y="186" width="96" height="52" rx="9"/><text x="220" y="209" text-anchor="middle">Vini</text><text class="s" x="220" y="224" text-anchor="middle">LLM agent</text></g>
+        <g class="node"><rect x="286" y="190" width="96" height="44" rx="9"/><text x="334" y="209" text-anchor="middle">Tool calls</text><text class="s" x="334" y="224" text-anchor="middle">search, booking</text></g>
+        <g class="node"><rect x="400" y="190" width="210" height="44" rx="9"/><text x="505" y="209" text-anchor="middle">Dealer inventory &amp; CRM</text><text class="s" x="505" y="224" text-anchor="middle">live stock, leads, appointments</text></g>
+        <g class="node"><rect x="286" y="268" width="96" height="44" rx="9"/><text x="334" y="287" text-anchor="middle">Post-call eval</text><text class="s" x="334" y="302" text-anchor="middle">intent, outcome</text></g>
+        <g class="node"><rect x="400" y="268" width="96" height="44" rx="9"/><text x="448" y="287" text-anchor="middle">Scheduler</text><text class="s" x="448" y="302" text-anchor="middle">EventBridge</text></g>
+        <g class="node"><rect x="514" y="268" width="96" height="44" rx="9"/><text x="562" y="287" text-anchor="middle">Follow-up SMS</text><text class="s" x="562" y="302" text-anchor="middle">consent re-check</text></g>
+        <g class="node core bus"><rect x="114" y="14" width="32" height="356" rx="9"/><text x="130" y="196" text-anchor="middle" transform="rotate(-90 130 192)">Kafka event stream</text></g>
+        <g class="node side"><rect x="400" y="118" width="100" height="28" rx="8"/><text class="s" x="450" y="136" text-anchor="middle">stale-run reconciler</text></g>
+        <g class="node"><rect x="172" y="338" width="438" height="32" rx="9"/><text x="391" y="358" text-anchor="middle">ClickHouse <tspan class="s">· analytics &amp; audit trail for every event</tspan></text></g>
       </svg>
     </figure>
   </div>

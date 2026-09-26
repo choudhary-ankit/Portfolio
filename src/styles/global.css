@@ -279,3 +279,9 @@ ol.journey,ul.tags{list-style:none;}
 .dn small{display:block;font-size:.72rem;font-weight:400;color:var(--muted);margin-top:2px;}
 .dn.side{border-style:dashed;font-size:.78rem;}
 .dlabel.c + .drow{margin-top:4px;}
+/* data-flow lanes (Systems) */
+.pipe .lane{fill:none;stroke:var(--line);stroke-dasharray:4 4;}
+.pipe .lane-l{fill:var(--muted);font-family:'IBM Plex Sans',sans-serif;font-size:9.5px;font-weight:600;letter-spacing:.08em;}
+.pipe .wire.dash{stroke-dasharray:4 4;}
+.pipe .node.side rect{fill:none;stroke-dasharray:4 3;}
+.pipe .node tspan.s{fill:var(--muted);font-size:10.5px;font-weight:400;}
