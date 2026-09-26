@@ -1,0 +1,27 @@
+---
+import Icon from './Icon.astro';
+import { PROFILE } from '../config';
+---
+<section class="wrap hero" id="home" aria-label="Introduction">
+  <div class="hero-text">
+    <h1>Ankit Choudhary.</h1>
+    <div class="role">Software Engineer II at Spyne</div>
+    <p>I build systems that keep running when traffic spikes: event-driven microservices, high-throughput media pipelines and, right now, LLM agents that hold real sales and service conversations over voice and SMS.</p>
+    <div class="cta">
+      <a class="btn" href="#contact">Get in touch <Icon name="mail" /></a>
+      <a class="btn alt" href="#work">See my work</a>
+    </div>
+    <div class="socials">
+      <a href={PROFILE.github} target="_blank" rel="noopener" aria-label="GitHub"><Icon name="github" /></a>
+      <a href={PROFILE.linkedin} target="_blank" rel="noopener" aria-label="LinkedIn"><Icon name="linkedin" /></a>
+      <a href={`mailto:${PROFILE.email}`} aria-label="Email"><Icon name="mail" /></a>
+    </div>
+  </div>
+  <div class="blob-wrap">
+    <div class="blob">
+      <img src="/photo.jpg" width="480" height="480" alt="Portrait of Ankit Choudhary, Software Engineer II at Spyne" fetchpriority="high" decoding="async" />
+    </div>
+    <span class="status"><i aria-hidden="true"></i>Building Vini at Spyne</span>
+  </div>
+  <a href="#systems" class="scroll-cue"><span class="mouse" aria-hidden="true"></span>Scroll down</a>
+</section>

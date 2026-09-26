@@ -1,0 +1,23 @@
+---
+import { getCollection } from 'astro:content';
+import Tags from './Tags.astro';
+
+// Renders nothing until at least one published project exists in src/content/projects/.
+const projects = (await getCollection('projects', ({ data }) => !data.draft)).sort((a, b) => a.data.order - b.data.order);
+---
+{projects.length > 0 && (
+  <section id="projects" class="wrap" aria-labelledby="projects-h">
+    <h2 class="h2" id="projects-h">Personal projects</h2>
+    <p class="lede">Things I build outside work.</p>
+    <div class="work">
+      {projects.map(({ data }) => (
+        <article class="case">
+          <h3>{data.url ? <a href={data.url} target="_blank" rel="noopener">{data.title}</a> : data.title}</h3>
+          <p>{data.description}</p>
+          {data.repo && <p><a href={data.repo} target="_blank" rel="noopener">Source on GitHub</a></p>}
+          <Tags tags={data.tags} />
+        </article>
+      ))}
+    </div>
+  </section>
+)}

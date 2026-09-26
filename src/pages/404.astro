@@ -1,0 +1,14 @@
+---
+import Base from '../layouts/Base.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+---
+<Base title="Page not found | Ankit Choudhary" description="This page doesn't exist." noindex>
+  <Header links={false} />
+  <main class="wrap notfound">
+    <h1>Page not found.</h1>
+    <p class="lede">The page you're looking for doesn't exist or has moved.</p>
+    <div class="cta"><a class="btn" href="/">Back to the homepage</a></div>
+  </main>
+  <Footer />
+</Base>

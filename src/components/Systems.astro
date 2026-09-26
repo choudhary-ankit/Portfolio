@@ -1,0 +1,88 @@
+<section id="systems" class="wrap" aria-labelledby="systems-h">
+  <div class="systems">
+    <div>
+      <h2 class="h2" id="systems-h">What I work on</h2>
+      <p class="lede">Dealer photos, phone calls and text messages all enter the same event backbone. From there, one path turns images into studio-quality listings for 100+ enterprises; the other feeds Vini, an LLM agent that talks to customers and updates the dealer's CRM.</p>
+      <div class="chips">
+        <div class="chip"><b>66%</b><span>faster image processing</span></div>
+        <div class="chip"><b>~1M</b><span>images processed concurrently</span></div>
+        <div class="chip"><b>&lt;1%</b><span>pipeline failure rate</span></div>
+      </div>
+    </div>
+    <figure class="pipe" aria-label="Animated diagram of the systems I work on: dealer photos, calls and SMS flow through Kafka into an image pipeline and the Vini LLM agent">
+      <div class="pipe-head"><span>Data flow</span><span class="live">running</span></div>
+      <svg viewBox="0 0 600 360" aria-hidden="true">
+        <g>
+          <path class="wire" id="r1" d="M100 60 C135 60 125 180 160 180 L270 180 C305 180 295 95 330 95 L440 95 L500 95"/>
+          <path class="wire" id="r2" d="M100 180 L270 180 C305 180 295 265 330 265 L440 265 L500 265"/>
+          <path class="wire" id="r3" d="M100 300 C135 300 125 180 160 180 L270 180 C305 180 295 265 330 265 L440 265 L500 265"/>
+        </g>
+        <g id="packets"></g>
+        <g class="node"><rect x="0" y="38" width="100" height="44" rx="9"/><text x="50" y="57" text-anchor="middle">Dealer photos</text><text class="s" x="50" y="72" text-anchor="middle">images, video</text></g>
+        <g class="node"><rect x="0" y="158" width="100" height="44" rx="9"/><text x="50" y="177" text-anchor="middle">Voice calls</text><text class="s" x="50" y="192" text-anchor="middle">LiveKit</text></g>
+        <g class="node"><rect x="0" y="278" width="100" height="44" rx="9"/><text x="50" y="297" text-anchor="middle">SMS</text><text class="s" x="50" y="312" text-anchor="middle">Twilio</text></g>
+        <g class="node core"><rect x="160" y="152" width="110" height="56" rx="10"/><text x="215" y="176" text-anchor="middle">Kafka</text><text class="s" x="215" y="192" text-anchor="middle">event stream</text></g>
+        <g class="node core"><rect x="330" y="67" width="110" height="56" rx="10"/><text x="385" y="91" text-anchor="middle">Step Functions</text><text class="s" x="385" y="107" text-anchor="middle">image pipeline</text></g>
+        <g class="node ai"><rect x="330" y="237" width="110" height="56" rx="10"/><text x="385" y="261" text-anchor="middle">Vini</text><text class="s" x="385" y="277" text-anchor="middle">LLM agent</text></g>
+        <g class="node"><rect x="500" y="73" width="100" height="44" rx="9"/><text x="550" y="92" text-anchor="middle">Studio images</text><text class="s" x="550" y="107" text-anchor="middle">100+ enterprises</text></g>
+        <g class="node"><rect x="500" y="243" width="100" height="44" rx="9"/><text x="550" y="262" text-anchor="middle">Dealer CRM</text><text class="s" x="550" y="277" text-anchor="middle">inventory, leads</text></g>
+      </svg>
+    </figure>
+  </div>
+</section>
+
+<script>
+  // Pipeline packets travelling along the wires.
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const svgNS = 'http://www.w3.org/2000/svg';
+  const g = document.getElementById('packets')!;
+  type Route = { p: SVGPathElement; c: string; every: number; len: number; last: number };
+  const routes: Route[] = [
+    ['r1', 'var(--accent)', 900],
+    ['r2', 'var(--amber)', 1700],
+    ['r3', 'var(--amber)', 2300],
+  ].map(([id, c, every]) => {
+    const p = document.getElementById(id as string) as unknown as SVGPathElement;
+    return { p, c: c as string, every: every as number, len: p.getTotalLength(), last: -99999 };
+  });
+
+  const dot = (r: Route) => {
+    const c = document.createElementNS(svgNS, 'circle');
+    c.setAttribute('r', '4.5');
+    c.style.fill = r.c;
+    g.appendChild(c);
+    return c;
+  };
+
+  if (reduce) {
+    routes.forEach((r) => [0.2, 0.5, 0.8].forEach((f) => {
+      const pt = r.p.getPointAtLength(r.len * f);
+      const c = dot(r);
+      c.setAttribute('cx', String(pt.x));
+      c.setAttribute('cy', String(pt.y));
+    }));
+  } else {
+    let visible = true;
+    new IntersectionObserver((es) => { visible = es[0].isIntersecting; }).observe(document.querySelector('.pipe')!);
+    const packets: { el: SVGCircleElement; r: Route; t: number }[] = [];
+    let prev = performance.now();
+    const tick = (now: number) => {
+      const dt = now - prev;
+      prev = now;
+      if (visible && dt < 200) {
+        routes.forEach((r) => { if (now - r.last > r.every) { r.last = now; packets.push({ el: dot(r), r, t: 0 }); } });
+        for (let i = packets.length - 1; i >= 0; i--) {
+          const k = packets[i];
+          k.t += dt / 3200;
+          if (k.t >= 1) { k.el.remove(); packets.splice(i, 1); continue; }
+          const pt = k.r.p.getPointAtLength(k.r.len * k.t);
+          k.el.setAttribute('cx', String(pt.x));
+          k.el.setAttribute('cy', String(pt.y));
+          k.el.style.opacity = String(k.t > 0.9 ? (1 - k.t) * 10 : 1);
+        }
+      }
+      requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+  }
+</script>

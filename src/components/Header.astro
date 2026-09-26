@@ -1,0 +1,68 @@
+---
+import Icon from './Icon.astro';
+
+interface Props { links?: boolean }
+const { links = true } = Astro.props;
+const nav = [
+  ['systems', 'Systems'],
+  ['impact', 'Impact'],
+  ['journey', 'Journey'],
+  ['stack', 'Stack'],
+  ['work', 'Work'],
+  ['contact', 'Contact'],
+];
+---
+<header id="hdr">
+  <nav class="wrap nav" aria-label="Main">
+    <a class="brand" href={links ? '#top' : '/'}><i aria-hidden="true">AC</i>Ankit Choudhary</a>
+    {links && (
+      <ul class="links" id="links">
+        {nav.map(([id, label]) => <li><a href={`#${id}`}>{label}</a></li>)}
+      </ul>
+    )}
+    <div class="nav-right">
+      <button class="icon-btn" id="theme" type="button" aria-label="Toggle light and dark theme"><Icon name="sun" /></button>
+      {links && (
+        <button class="icon-btn menu" id="menu" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="links"><Icon name="menu" /></button>
+      )}
+    </div>
+  </nav>
+</header>
+
+<script>
+  const root = document.documentElement;
+  document.getElementById('theme')!.addEventListener('click', () => {
+    const next = (root.getAttribute('data-theme') || 'dark') === 'dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    try { localStorage.setItem('theme', next); } catch (e) {}
+  });
+
+  const hdr = document.getElementById('hdr')!;
+  addEventListener('scroll', () => hdr.classList.toggle('scrolled', scrollY > 8), { passive: true });
+
+  const menu = document.getElementById('menu');
+  const links = document.getElementById('links');
+  if (menu && links) {
+    menu.addEventListener('click', () => {
+      const open = links.classList.toggle('open');
+      menu.setAttribute('aria-expanded', String(open));
+    });
+    links.addEventListener('click', (e) => {
+      if ((e.target as Element).tagName === 'A') {
+        links.classList.remove('open');
+        menu.setAttribute('aria-expanded', 'false');
+      }
+    });
+
+    const navA = [...links.querySelectorAll('a')];
+    const io = new IntersectionObserver((es) => {
+      es.forEach((e) => {
+        if (e.isIntersecting) navA.forEach((a) => a.classList.toggle('on', a.getAttribute('href') === '#' + e.target.id));
+      });
+    }, { rootMargin: '-40% 0px -55% 0px' });
+    navA.forEach((a) => {
+      const s = document.querySelector(a.getAttribute('href')!);
+      if (s) io.observe(s);
+    });
+  }
+</script>

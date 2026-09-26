@@ -1,0 +1,23 @@
+---
+import Tags from './Tags.astro';
+const layers = [
+  { cls: 'ai', name: 'AI & conversation', sub: 'LLM agents', tags: ['LLMs', 'Conversational AI', 'LiveKit', 'Twilio', 'LLM-based testing'] },
+  { cls: '', name: 'Interfaces', sub: 'web apps & dashboards', tags: ['React.js', 'Next.js', 'Redux', 'Tailwind CSS', 'Material UI'] },
+  { cls: 'hot', name: 'Services', sub: 'APIs & microservices', tags: ['Node.js', 'Express.js', 'Sails.js', 'REST APIs', 'Python'] },
+  { cls: 'hot', name: 'Streaming', sub: 'events & queues', tags: ['Kafka', 'AWS SQS', 'Bull Queue', 'WebSockets', 'Event-driven architecture'] },
+  { cls: 'hot', name: 'Orchestration', sub: 'cloud workflows', tags: ['AWS Step Functions', 'EventBridge Scheduler', 'Observability & retries'] },
+  { cls: '', name: 'Data', sub: 'storage & analytics', tags: ['MongoDB', 'MySQL', 'Redis', 'ClickHouse', 'DynamoDB', 'SQL'] },
+];
+---
+<section id="stack" class="wrap" aria-labelledby="stack-h">
+  <h2 class="h2" id="stack-h">My stack, layer by layer</h2>
+  <p class="lede">Arranged the way a request travels through the systems I build.</p>
+  <div class="layers">
+    {layers.map((l) => (
+      <div class:list={['layer', l.cls]}>
+        <h3>{l.name}<small>{l.sub}</small></h3>
+        <Tags tags={l.tags} label={`${l.name} technologies`} />
+      </div>
+    ))}
+  </div>
+</section>

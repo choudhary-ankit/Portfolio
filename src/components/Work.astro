@@ -1,0 +1,97 @@
+---
+import Tags from './Tags.astro';
+// TODO(Ankit): confirm these diagrams match how the systems really work and that this level of Spyne detail is OK to publish.
+---
+<section id="work" class="wrap" aria-labelledby="work-h">
+  <h2 class="h2" id="work-h">Selected work</h2>
+  <p class="lede">How I built the systems behind those numbers: the problem, my approach and the architecture.</p>
+  <div class="work">
+    <article class="case feature">
+      <div>
+        <span class="kicker">Building now</span>
+        <h3>Vini: conversational AI for car dealerships</h3>
+        <p>An LLM-powered agent that handles dealership sales and service conversations over phone calls and SMS, connected in real time to the dealer's inventory and CRM. I work across the voice and text pipelines, conversation orchestration and those live integrations.</p>
+        <Tags tags={['LLMs', 'LiveKit', 'Twilio', 'Node.js', 'Kafka', 'Redis']} label="Vini technologies" />
+      </div>
+      <div>
+        <p style="font-size:.86rem;margin-bottom:8px">SMS follow-up flow I designed for inconclusive calls</p>
+        <div class="flow" role="img" aria-label="Call ends, eligibility gates, EventBridge debounce, eligibility API, SMS via Twilio, Kafka to ClickHouse audit"><span class="v">Call ends</span><i>→</i><span>Eligibility gates</span><i>→</i><span class="k">EventBridge debounce</span><i>→</i><span>Eligibility API</span><i>→</i><span class="v">SMS via Twilio</span><i>→</i><span class="k">Kafka → ClickHouse audit</span></div>
+        <dl><dt>State</dt><dd>DynamoDB / Redis key-value store</dd><dt>Goal</dt><dd>Follow up automatically on calls that ended without an outcome</dd></dl>
+      </div>
+    </article>
+  </div>
+  <div class="cases">
+    <article class="cs">
+      <div class="cs-text">
+        <span class="m-sys">Architected</span>
+        <h3>AI image-processing orchestration</h3>
+        <dl>
+          <dt>Challenge</dt><dd>Large image batches from 100 enterprises were processed slowly and queued behind each other.</dd>
+          <dt>Approach</dt><dd>Rebuilt the core flow as AWS Step Functions workflows, so each processing stage runs as a managed, observable step and batches scale out instead of waiting.</dd>
+        </dl>
+        <Tags tags={['AWS Step Functions', 'SQS', 'Node.js']} />
+      </div>
+      <div class="diagram" role="img" aria-label="Diagram: image batch into a Step Functions workflow, parallel processing steps, then QC and delivery">
+        <div class="dn">Image batch</div><div class="dar"></div>
+        <div class="dn k">Step Functions workflow</div><div class="dar"></div>
+        <div class="drow"><div class="dn s">Process</div><div class="dn s">Process</div><div class="dn s">Process</div></div><div class="dar"></div>
+        <div class="dn">QC &amp; delivery</div>
+      </div>
+    </article>
+
+    <article class="cs flip">
+      <div class="cs-text">
+        <span class="m-sys">Led</span>
+        <h3>Monolith to microservices</h3>
+        <dl>
+          <dt>Challenge</dt><dd>One service handled images, video and 360° media one after another, so a single slow job held up the whole order.</dd>
+          <dt>Approach</dt><dd>Led the split into independent services per media type that process in parallel and communicate through events.</dd>
+        </dl>
+        <Tags tags={['Microservices', 'Kafka', 'MongoDB']} />
+      </div>
+      <div class="diagram" role="img" aria-label="Diagram: one sequential monolith split into image, video and 360 services running in parallel">
+        <span class="dlabel">Before</span>
+        <div class="dn old">Monolith: images, then video, then 360°</div><div class="dar"></div>
+        <span class="dlabel">After</span>
+        <div class="drow"><div class="dn k">Image service</div><div class="dn k">Video service</div><div class="dn k">360° service</div></div>
+      </div>
+    </article>
+
+    <article class="cs">
+      <div class="cs-text">
+        <span class="m-sys">Designed</span>
+        <h3>Event-driven webhook platform</h3>
+        <dl>
+          <dt>Challenge</dt><dd>Clients received a webhook for every processing step, plus duplicates, which overloaded their servers.</dd>
+          <dt>Approach</dt><dd>Designed an event-driven layer that collects step events and sends one consolidated webhook per SKU, with duplicate protection.</dd>
+        </dl>
+        <Tags tags={['Event-driven', 'Kafka', 'Redis']} />
+      </div>
+      <div class="diagram" role="img" aria-label="Diagram: many step events collected into one webhook per SKU">
+        <div class="dots"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+        <span class="dlabel c">Step events</span><div class="dar"></div>
+        <div class="dn k">Collect &amp; de-duplicate</div><div class="dar"></div>
+        <div class="dn">One webhook per SKU</div><div class="dar"></div>
+        <div class="dn s">Client server</div>
+      </div>
+    </article>
+
+    <article class="cs flip">
+      <div class="cs-text">
+        <span class="m-sys">Improved</span>
+        <h3>Observability &amp; retries</h3>
+        <dl>
+          <dt>Challenge</dt><dd>Transient failures inside distributed image workflows surfaced to customers.</dd>
+          <dt>Approach</dt><dd>Added better monitoring and retry strategies at the workflow level, so failures are caught and recovered automatically.</dd>
+        </dl>
+        <Tags tags={['Observability', 'Retries', 'AWS']} />
+      </div>
+      <div class="diagram" role="img" aria-label="Diagram: workflow step, failure detected, retried automatically, with monitoring and alerts">
+        <div class="dn">Workflow step</div><div class="dar"></div>
+        <div class="dn old">Failure detected</div><div class="dar"></div>
+        <div class="dn k">Retry strategy</div><div class="dar"></div>
+        <div class="drow"><div class="dn">Job completes</div><div class="dn s">Monitoring &amp; alerts</div></div>
+      </div>
+    </article>
+  </div>
+</section>

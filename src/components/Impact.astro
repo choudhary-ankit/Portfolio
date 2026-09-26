@@ -1,0 +1,61 @@
+---
+import Icon from './Icon.astro';
+
+// Figures are exactly as approved in the design; do not change without Ankit.
+const small = [
+  { num: '~60%', unit: 'faster', sys: 'Microservices', title: 'Multi-product processing', before: '45–60 min', after: '~20 min', w: 33, note: 'Images, video and 360° media now process in parallel.' },
+  { num: '75%', unit: 'faster', sys: 'QC system', title: 'Quality check per SKU', before: '2 min', after: '30 sec', w: 25, note: 'QC reviewers handle several SKUs at once.' },
+  { num: '~53%', unit: 'faster', sys: 'Auto-assignment', title: 'Delivery time per SKU', before: '15 min', after: '7 min', w: 47, note: "Work is auto-assigned by each client's SLA priority." },
+  { num: '~90%', unit: 'fewer', sys: 'Event-driven', title: 'Webhook events per SKU', before: '10', after: '1', w: 10, note: 'Less load on client servers, no duplicate events.' },
+  { num: '~85%', unit: 'lower', sys: 'Observability', title: 'Pipeline failure rate', before: '7%', after: '<1%', w: 12, note: 'Better monitoring and retries catch failures before customers see them.', wide: true },
+];
+---
+<section id="impact" class="wrap" aria-labelledby="impact-h">
+  <h2 class="h2" id="impact-h">Impact in numbers</h2>
+  <p class="lede">Results from systems I designed and shipped at Spyne, measured before and after.</p>
+  <div class="bento">
+    <article class="m hero-m">
+      <div class="ring-wrap">
+        <svg class="ring" viewBox="0 0 120 120" aria-hidden="true"><circle cx="60" cy="60" r="52" class="ring-bg"/><circle cx="60" cy="60" r="52" class="ring-fg" data-p="66"/></svg>
+        <div class="ring-num">66%<span>faster</span></div>
+      </div>
+      <div>
+        <span class="m-sys">AWS Step Functions</span>
+        <h3>AI image processing, rebuilt</h3>
+        <div class="ba big"><s>90 min</s><Icon name="arrow" class="arr" /><b>30 min</b></div>
+        <p>I re-architected the core pipeline that turns dealer photos into studio-quality images, so large batches finish in a third of the time.</p>
+      </div>
+    </article>
+    {small.map((m) => (
+      <article class:list={['m', { wide: m.wide }]}>
+        <div class="m-top"><div class="m-num">{m.num}<span>{m.unit}</span></div><span class="m-sys">{m.sys}</span></div>
+        <h3>{m.title}</h3>
+        <div class="ba"><s>{m.before}</s><Icon name="arrow" class="arr" /><b>{m.after}</b></div>
+        <div class="mini" aria-hidden="true"><i class="fb" data-w="100"></i><i class="fa" data-w={m.w}></i></div>
+        <p>{m.note}</p>
+      </article>
+    ))}
+    <article class="m scale">
+      <span class="m-sys">Scale</span>
+      <div class="scale-row">
+        <div><b>~1M</b><span>images processed concurrently</span></div>
+        <div><b>100+</b><span>enterprise clients</span></div>
+        <div><b>10K</b><span>images per client at once</span></div>
+      </div>
+    </article>
+  </div>
+</section>
+
+<script>
+  // Bars and ring fill in once each card is on screen.
+  const bio = new IntersectionObserver((es) => {
+    es.forEach((e) => {
+      if (!e.isIntersecting) return;
+      e.target.querySelectorAll<HTMLElement>('.mini i').forEach((f) => { f.style.width = f.dataset.w + '%'; });
+      const r = e.target.querySelector<SVGCircleElement>('.ring-fg');
+      if (r) r.style.strokeDashoffset = String(327 * (1 - Number(r.dataset.p) / 100));
+      bio.unobserve(e.target);
+    });
+  }, { threshold: 0.3 });
+  document.querySelectorAll('.m').forEach((m) => bio.observe(m));
+</script>

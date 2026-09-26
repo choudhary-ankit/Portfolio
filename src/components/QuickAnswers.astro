@@ -1,0 +1,48 @@
+---
+// TODO(Ankit): confirm wording, especially the career-switch answer.
+const qa = [
+  ['What are you working on right now?', "I'm building Vini at Spyne, an LLM-powered agent that handles car dealership sales and service conversations over phone calls and SMS, connected to the dealer's inventory and CRM. Recently I designed its automated SMS follow-up for calls that end without a clear outcome."],
+  ["What's your biggest technical win?", 'Re-architecting our AI image-processing orchestration on AWS Step Functions. Processing time dropped from 90 to 30 minutes while handling around a million images concurrently across 100 enterprises.'],
+  ['What kind of role are you looking for?', 'Backend, distributed systems or applied AI/LLM roles, where I can own services end to end and work on problems where scale and reliability matter.'],
+  ['Have you led a team?', "Yes. At Acadza I built and led a team of six engineers while shipping the company's first production platform, mentoring them on delivery, debugging and scalable frontend practices."],
+  ['Why did you switch from mechanical engineering?', 'After graduating in mechanical engineering, I taught myself to code and joined Acadza as a software engineer in 2021. The engineering mindset carried over: I still think in terms of throughput, failure modes and what happens under load.'],
+];
+---
+<section id="ask" class="wrap" aria-labelledby="ask-h">
+  <h2 class="h2" id="ask-h">Quick answers</h2>
+  <p class="lede">Short on time? Pick a question.</p>
+  <div class="ask">
+    <div class="qs">
+      {qa.map(([q], i) => <button class="q" type="button" data-a={i} aria-pressed="false">{q}</button>)}
+    </div>
+    <div class="chat" id="chat" aria-live="polite"><p class="hint">Pick a question on the left to see my answer here.</p></div>
+  </div>
+  <!-- Answers ship in the HTML (readable without JS and by crawlers); the script moves them into the chat. -->
+  <dl class="sr-only" id="answers">
+    {qa.map(([q, a]) => <><dt>{q}</dt><dd>{a}</dd></>)}
+  </dl>
+</section>
+
+<script>
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const chat = document.getElementById('chat')!;
+  const answers = [...document.querySelectorAll('#answers dd')].map((d) => d.textContent || '');
+  const qs = [...document.querySelectorAll<HTMLButtonElement>('.q')];
+  let busy = false;
+  const bubble = (cls: string) => {
+    const d = document.createElement('div');
+    d.className = 'msg ' + cls;
+    chat.appendChild(d);
+    return d;
+  };
+  qs.forEach((q) => q.addEventListener('click', () => {
+    if (busy) return;
+    busy = true;
+    qs.forEach((x) => x.setAttribute('aria-pressed', String(x === q)));
+    chat.innerHTML = '';
+    bubble('you').textContent = q.textContent;
+    const t = bubble('me');
+    t.innerHTML = '<span class="typing"><i></i><i></i><i></i></span>';
+    setTimeout(() => { t.textContent = answers[Number(q.dataset.a)]; busy = false; }, reduce ? 0 : 650);
+  }));
+</script>
