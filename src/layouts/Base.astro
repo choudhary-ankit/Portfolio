@@ -127,6 +127,27 @@ const jsonLd = [
         e.preventDefault();
         t.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
       });
+
+      // mailto: does nothing when the visitor has no mail app set up (common with webmail),
+      // so every email link also copies the address and says so.
+      const toast = document.getElementById('toast')!;
+      let hide: number | undefined;
+      document.addEventListener('click', (e) => {
+        const a = (e.target as Element).closest<HTMLAnchorElement>('a[href^="mailto:"]');
+        if (!a) return;
+        const email = a.href.slice('mailto:'.length).split('?')[0];
+        const show = (msg: string) => {
+          toast.textContent = msg;
+          toast.classList.add('on');
+          clearTimeout(hide);
+          hide = window.setTimeout(() => toast.classList.remove('on'), 4000);
+        };
+        navigator.clipboard?.writeText(email).then(
+          () => show(`Email copied: ${email}`),
+          () => show(`Email: ${email}`),
+        ) ?? show(`Email: ${email}`);
+      });
     </script>
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
   </body>
 </html>
