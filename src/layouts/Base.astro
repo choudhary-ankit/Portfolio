@@ -18,59 +18,87 @@ const {
 
 const FONTS =
   'https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap';
-const canonical =new URL(Astro.url.pathname, SITE_URL).href;
+const canonical = new URL(Astro.url.pathname, SITE_URL).href;
 const ogImage = new URL('/og-image.png', SITE_URL).href;
-const photo = new URL('/photo.jpg', SITE_URL).href;
+const photo = new URL(PROFILE.photo, SITE_URL).href;
+const modified = new Date().toISOString();
 
-const jsonLd = [
-  {
-    '@context': 'https://schema.org',
-    '@type': 'Person',
-    '@id': `${SITE_URL}/#person`,
-    name: PROFILE.name,
-    jobTitle: PROFILE.jobTitle,
-    worksFor: { '@type': 'Organization', name: PROFILE.employer },
-    address: {
-      '@type': 'PostalAddress',
-      addressLocality: PROFILE.locality,
-      addressRegion: PROFILE.region,
-      addressCountry: PROFILE.country,
+const person = {
+  '@type': 'Person',
+  '@id': `${SITE_URL}/#person`,
+  name: PROFILE.name,
+  alternateName: 'Choudhary Ankit',
+  givenName: 'Ankit',
+  familyName: 'Choudhary',
+  jobTitle: PROFILE.jobTitle,
+  description: SEO.description,
+  worksFor: { '@type': 'Organization', name: PROFILE.employer },
+  hasOccupation: {
+    '@type': 'Occupation',
+    name: 'Software Engineer',
+    occupationLocation: { '@type': 'City', name: 'Gurugram (Gurgaon), Haryana, India' },
+    skills: 'Distributed systems, backend development, full-stack development, event-driven microservices, LLM applications',
+  },
+  address: {
+    '@type': 'PostalAddress',
+    addressLocality: PROFILE.locality,
+    addressRegion: PROFILE.region,
+    addressCountry: PROFILE.country,
+  },
+  homeLocation: { '@type': 'Place', name: 'Gurugram (Gurgaon), Haryana, India' },
+  email: `mailto:${PROFILE.email}`,
+  url: `${SITE_URL}/`,
+  image: { '@type': 'ImageObject', url: photo, width: 480, height: 480, caption: PROFILE.name },
+  sameAs: [PROFILE.linkedin, PROFILE.github],
+  alumniOf: { '@type': 'CollegeOrUniversity', name: 'Swami Vivekanand Institute of Engineering & Technology' },
+  knowsLanguage: ['English', 'Hindi'],
+  knowsAbout: [
+    'Software engineering',
+    'Backend development',
+    'Full-stack development',
+    'Distributed systems',
+    'Event-driven architecture',
+    'Microservices',
+    'System design',
+    'LLM applications',
+    'Conversational AI',
+    'Node.js',
+    'JavaScript',
+    'Python',
+    'Kafka',
+    'AWS Step Functions',
+    'Redis',
+    'MongoDB',
+    'ClickHouse',
+    'React.js',
+    'Next.js',
+  ],
+};
+
+// ProfilePage is Google's structured-data type for a page about one person.
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'ProfilePage',
+      '@id': `${SITE_URL}/#profilepage`,
+      url: `${SITE_URL}/`,
+      name: SEO.title,
+      inLanguage: 'en',
+      dateModified: modified,
+      isPartOf: { '@id': `${SITE_URL}/#website` },
+      mainEntity: person,
     },
-    email: `mailto:${PROFILE.email}`,
-    url: `${SITE_URL}/`,
-    image: photo,
-    sameAs: [PROFILE.linkedin, PROFILE.github],
-    alumniOf: { '@type': 'CollegeOrUniversity', name: 'Swami Vivekanand Institute of Engineering & Technology' },
-    knowsLanguage: ['English', 'Hindi'],
-    knowsAbout: [
-      'Distributed systems',
-      'Event-driven architecture',
-      'Microservices',
-      'System design',
-      'LLM applications',
-      'Conversational AI',
-      'Node.js',
-      'JavaScript',
-      'Python',
-      'Kafka',
-      'AWS Step Functions',
-      'Redis',
-      'MongoDB',
-      'ClickHouse',
-      'React.js',
-      'Next.js',
-    ],
-  },
-  {
-    '@context': 'https://schema.org',
-    '@type': 'WebSite',
-    '@id': `${SITE_URL}/#website`,
-    name: PROFILE.name,
-    url: `${SITE_URL}/`,
-    inLanguage: 'en',
-    author: { '@id': `${SITE_URL}/#person` },
-  },
-];
+    {
+      '@type': 'WebSite',
+      '@id': `${SITE_URL}/#website`,
+      name: PROFILE.name,
+      url: `${SITE_URL}/`,
+      inLanguage: 'en',
+      publisher: { '@id': `${SITE_URL}/#person` },
+    },
+  ],
+};
 ---
 <!doctype html>
 <html lang="en" data-theme="dark">
@@ -82,18 +110,22 @@ const jsonLd = [
     {noindex ? <meta name="robots" content="noindex" /> : <link rel="canonical" href={canonical} />}
     <meta name="author" content={PROFILE.name} />
     <meta name="theme-color" content={SEO.themeColor} />
+    {SEO.googleSiteVerification && <meta name="google-site-verification" content={SEO.googleSiteVerification} />}
+    {SEO.bingSiteVerification && <meta name="msvalidate.01" content={SEO.bingSiteVerification} />}
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon-48.png" type="image/png" sizes="48x48" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 
     <meta property="og:type" content="profile" />
     <meta property="og:site_name" content={PROFILE.name} />
-    <meta property="og:locale" content="en_US" />
+    <meta property="og:locale" content="en_IN" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
     <meta property="og:image" content={ogImage} />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content="Ankit Choudhary, Software Engineer II at Spyne" />
+    <meta property="og:image:alt" content="Ankit Choudhary, Software Engineer II at Spyne, Gurugram" />
     <meta property="profile:first_name" content="Ankit" />
     <meta property="profile:last_name" content="Choudhary" />
     <meta name="twitter:card" content="summary_large_image" />
@@ -101,7 +133,7 @@ const jsonLd = [
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImage} />
 
-    {preloadPhoto && <link rel="preload" as="image" href="/photo.jpg" fetchpriority="high" />}
+    {preloadPhoto && <link rel="preload" as="image" href={PROFILE.photo} fetchpriority="high" />}
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <!-- Loaded without blocking first paint; display=swap shows fallback text until the fonts arrive. -->

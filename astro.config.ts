@@ -10,5 +10,5 @@ export default defineConfig({
     // The whole stylesheet is small; inlining it removes a render-blocking request.
     inlineStylesheets: 'always',
   },
-  integrations: [sitemap()],
+  integrations: [sitemap({ lastmod: new Date(), changefreq: 'monthly', priority: 1.0 })],
 });
