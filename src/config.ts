@@ -9,6 +9,7 @@ export const PROFILE = {
   email: 'ankit_chy@outlook.com',
   phone: '+91 79781 43053',
   phoneHref: 'tel:+917978143053',
+  whatsapp: 'https://wa.me/917978143053',
   linkedin: 'https://www.linkedin.com/in/ankit-choudhary-522aa6122',
   github: 'https://github.com/choudhary-ankit',
   locality: 'Gurugram',
