@@ -290,3 +290,4 @@ ol.journey,ul.tags{list-style:none;}
 .toast.on{opacity:1;transform:translate(-50%,0);}
 /* count-up numbers keep a steady width while they tick */
 #impact data{font-variant-numeric:tabular-nums;}
+.case .flow-note{font-size:.78rem;margin-top:14px;}

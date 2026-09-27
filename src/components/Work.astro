@@ -10,13 +10,15 @@ import Tags from './Tags.astro';
       <div>
         <span class="kicker">Building now</span>
         <h3>Vini: conversational AI for car dealerships</h3>
-        <p>An LLM-powered agent that handles dealership sales and service conversations over phone calls and SMS, connected in real time to the dealer's inventory and CRM. I work across the voice and text pipelines, conversation orchestration and those live integrations.</p>
+        <p>An LLM-powered agent that answers a dealership's sales and service calls and texts. It works out what the customer needs, checks live inventory, books appointments and logs the conversation to the dealer's CRM, handing off to the dealership team when a person should step in. I work across the voice and text pipelines, conversation orchestration and those live integrations.</p>
         <Tags tags={['LLMs', 'LiveKit', 'Twilio', 'Node.js', 'Kafka', 'Redis']} label="Vini technologies" />
       </div>
       <div>
-        <p style="font-size:.86rem;margin-bottom:8px">SMS follow-up flow I designed for inconclusive calls</p>
-        <div class="flow" role="img" aria-label="Call ends, eligibility check, follow-up scheduled with EventBridge, SMS via Twilio, audited through Kafka into ClickHouse"><span class="v">Call ends</span><i>→</i><span>Eligibility check</span><i>→</i><span class="k">EventBridge schedule</span><i>→</i><span class="v">SMS via Twilio</span><i>→</i><span class="k">Kafka → ClickHouse audit</span></div>
-        <dl><dt>Goal</dt><dd>Follow up automatically on calls that ended without an outcome</dd></dl>
+        <p style="font-size:.86rem;margin-bottom:8px">How a conversation flows through Vini</p>
+        <div class="flow" role="img" aria-label="A customer calls or texts, the conversation arrives over LiveKit or Twilio, Vini the LLM agent understands the request, uses tools for inventory search and appointment booking, and updates the dealer's CRM"><span class="v">Customer calls or texts</span><i>→</i><span>LiveKit / Twilio</span><i>→</i><span class="k">Vini LLM agent</span><i>→</i><span>Tools: inventory, booking</span><i>→</i><span class="v">Dealer CRM updated</span></div>
+        <p class="flow-note">Around every conversation</p>
+        <div class="flow" role="img" aria-label="Around every conversation: handoff to a person when needed, and a summary with follow-up after it ends"><span>Handoff to a person when needed</span><span>Summary &amp; follow-up after the call</span></div>
+        <dl><dt>Channels</dt><dd>Voice and SMS</dd><dt>Data</dt><dd>Dealer inventory and CRM, in real time</dd></dl>
       </div>
     </article>
   </div>
