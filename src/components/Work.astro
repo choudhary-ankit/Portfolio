@@ -13,9 +13,13 @@ import Tags from './Tags.astro';
         <p>An LLM-powered agent that answers a dealership's sales and service calls and texts. It works out what the customer needs, checks live inventory, books appointments and logs the conversation to the dealer's CRM, handing off to the dealership team when a person should step in. I work across the voice and text pipelines, conversation orchestration and those live integrations.</p>
         <Tags tags={['LLMs', 'LiveKit', 'Twilio', 'Node.js', 'Kafka', 'Redis']} label="Vini technologies" />
       </div>
-      <div>
-        <p style="font-size:.86rem;margin-bottom:8px">How a conversation flows through Vini</p>
-        <div class="flow" role="img" aria-label="A customer calls or texts, the conversation arrives over LiveKit or Twilio, Vini the LLM agent understands the request, uses tools for inventory search and appointment booking, and updates the dealer's CRM"><span class="v">Customer calls or texts</span><i>→</i><span>LiveKit / Twilio</span><i>→</i><span class="k">Vini LLM agent</span><i>→</i><span>Tools: inventory, booking</span><i>→</i><span class="v">Dealer CRM updated</span></div>
+      <div class="diagram" role="img" aria-label="Diagram: a customer calls or texts, the conversation arrives over LiveKit or Twilio, Vini the LLM agent handles it using inventory search and appointment booking tools, and the dealer's CRM is updated">
+        <span class="dlabel c vini-l">How a conversation flows through Vini</span>
+        <div class="dn">Customer calls or texts</div><div class="dar"></div>
+        <div class="dn s">LiveKit / Twilio</div><div class="dar"></div>
+        <div class="dn ai">Vini LLM agent</div><div class="dar"></div>
+        <div class="drow two-col"><div class="dn s">Inventory search</div><div class="dn s">Appointment booking</div></div><div class="dar"></div>
+        <div class="dn k">Dealer CRM updated</div>
       </div>
     </article>
   </div>
