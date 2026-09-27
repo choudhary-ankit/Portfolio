@@ -1,6 +1,12 @@
 ---
 import Icon from './Icon.astro';
 
+// Splits "~60%" into "~", 60, "%" so the number itself can count up on scroll.
+const parts = (text: string) => {
+  const [, pre, value, suf] = text.match(/^([^\d]*)([\d.]+)(.*)$/)!;
+  return { pre, value, suf };
+};
+
 // Figures are exactly as approved in the design; do not change without Ankit.
 const small = [
   { num: '~60%', unit: 'faster', sys: 'Microservices', title: 'Multi-product processing', before: '45–60 min', after: '~20 min', w: 33, note: 'Images, video and 360° media now process in parallel.' },
@@ -17,7 +23,7 @@ const small = [
     <article class="m hero-m">
       <div class="ring-wrap">
         <svg class="ring" viewBox="0 0 120 120" aria-hidden="true"><circle cx="60" cy="60" r="52" class="ring-bg"/><circle cx="60" cy="60" r="52" class="ring-fg" data-p="66"/></svg>
-        <div class="ring-num">66%<span>faster</span></div>
+        <div class="ring-num"><div><data value="66">66</data>%</div><span>faster</span></div>
       </div>
       <div>
         <span class="m-sys">AWS Step Functions</span>
@@ -28,7 +34,7 @@ const small = [
     </article>
     {small.map((m) => (
       <article class:list={['m', { wide: m.wide }]}>
-        <div class="m-top"><div class="m-num">{m.num}<span>{m.unit}</span></div><span class="m-sys">{m.sys}</span></div>
+        <div class="m-top"><div class="m-num">{(({ pre, value, suf }) => <>{pre}<data value={value}>{value}</data>{suf}</>)(parts(m.num))}<span>{m.unit}</span></div><span class="m-sys">{m.sys}</span></div>
         <h3>{m.title}</h3>
         <div class="ba"><s>{m.before}</s><Icon name="arrow" class="arr" /><b>{m.after}</b></div>
         <div class="mini" aria-hidden="true"><i class="fb" data-w="100"></i><i class="fa" data-w={m.w}></i></div>
@@ -38,19 +44,40 @@ const small = [
     <article class="m scale">
       <span class="m-sys">Scale</span>
       <div class="scale-row">
-        <div><b>~1M</b><span>images processed concurrently</span></div>
-        <div><b>100+</b><span>enterprise clients</span></div>
-        <div><b>10K</b><span>images per client at once</span></div>
+        <div><b>~<data value="1">1</data>M</b><span>images processed concurrently</span></div>
+        <div><b><data value="100">100</data>+</b><span>enterprise clients</span></div>
+        <div><b><data value="10">10</data>K</b><span>images per client at once</span></div>
       </div>
     </article>
   </div>
 </section>
 
 <script>
-  // Bars and ring fill in once each card is on screen.
+  // Numbers count up from 0, and bars and ring fill in, once each card is on screen.
+  // The real values ship in the HTML; they only reset to 0 here, so crawlers,
+  // no-JS visitors and reduced-motion visitors always see the final figures.
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const DURATION = 1400; // matches the ring's stroke transition
+  const counters = [...document.querySelectorAll<HTMLDataElement>('#impact data[value]')];
+  if (!reduce) counters.forEach((d) => { d.textContent = '0'; });
+
+  const countUp = (d: HTMLDataElement) => {
+    const to = Number(d.value);
+    const decimals = to < 10 && Number.isInteger(to) && to > 0 && to < 2 ? 1 : 0; // "~1M" ticks 0.1, 0.2 ... 1
+    const start = performance.now();
+    const step = (now: number) => {
+      const t = Math.min((now - start) / DURATION, 1);
+      const eased = 1 - Math.pow(1 - t, 3);
+      d.textContent = t < 1 ? (to * eased).toFixed(decimals) : d.value;
+      if (t < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  };
+
   const bio = new IntersectionObserver((es) => {
     es.forEach((e) => {
       if (!e.isIntersecting) return;
+      if (!reduce) e.target.querySelectorAll<HTMLDataElement>('data[value]').forEach(countUp);
       e.target.querySelectorAll<HTMLElement>('.mini i').forEach((f) => { f.style.width = f.dataset.w + '%'; });
       const r = e.target.querySelector<SVGCircleElement>('.ring-fg');
       if (r) r.style.strokeDashoffset = String(327 * (1 - Number(r.dataset.p) / 100));
