@@ -12,16 +12,53 @@ import { PROFILE } from '../config';
       <a class="citem" href={PROFILE.github} target="_blank" rel="noopener"><Icon name="github" /><div><b>GitHub</b><span>choudhary-ankit</span></div></a>
       <a class="citem" href={PROFILE.phoneHref}><Icon name="phone" /><div><b>Phone</b><span>{PROFILE.phone}</span></div></a>
     </div>
-    <!-- Netlify Forms: detected at deploy time from this static HTML. -->
-    <form name="contact" method="POST" data-netlify="true" netlify-honeypot="bot-field">
+    <!-- Netlify Forms (free, unlimited submissions): detected at deploy time from this static HTML.
+         Without JS the form posts normally; with JS it sends in the background and shows the result inline. -->
+    <form name="contact" id="cform" data-fallback={PROFILE.email} method="POST" data-netlify="true" netlify-honeypot="bot-field">
       <input type="hidden" name="form-name" value="contact" />
+      <!-- Subject line of the notification email Netlify sends to Ankit. -->
+      <input type="hidden" name="subject" value="New portfolio message (%{submissionId})" />
       <p class="hp"><label>Leave this empty<input name="bot-field" tabindex="-1" autocomplete="off" /></label></p>
       <div class="two">
         <label>Name<input name="name" required autocomplete="name" placeholder="Your name" /></label>
         <label>Email<input name="email" type="email" required autocomplete="email" placeholder="you@company.com" /></label>
       </div>
       <label>Message<textarea name="message" required placeholder="Tell me about the role or project"></textarea></label>
-      <div><button class="btn" type="submit">Send message</button></div>
+      <div class="send"><button class="btn" type="submit">Send message</button><p class="form-status" role="status" aria-live="polite"></p></div>
     </form>
   </div>
 </section>
+
+<script>
+  const form = document.getElementById('cform') as HTMLFormElement;
+  const status = form.querySelector<HTMLElement>('.form-status')!;
+  const button = form.querySelector<HTMLButtonElement>('button[type="submit"]')!;
+  const email = form.dataset.fallback!;
+  const say = (msg: string, ok: boolean) => {
+    status.textContent = msg;
+    status.classList.toggle('ok', ok);
+    status.classList.toggle('err', !ok);
+  };
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    button.disabled = true;
+    button.textContent = 'Sending…';
+    say('', true);
+    try {
+      const res = await fetch('/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams(new FormData(form) as unknown as Record<string, string>).toString(),
+      });
+      if (!res.ok) throw new Error(String(res.status));
+      form.reset();
+      say("Thanks, your message is on its way. I'll reply within a couple of days.", true);
+    } catch {
+      say(`Couldn't send right now. Please email me at ${email}.`, false);
+    } finally {
+      button.disabled = false;
+      button.textContent = 'Send message';
+    }
+  });
+</script>

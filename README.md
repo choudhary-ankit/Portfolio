@@ -40,4 +40,14 @@ Update `SITE_URL` in `src/config.ts`. Canonical URLs, Open Graph tags, JSON-LD, 
 
 ## Deploy (Netlify)
 
-`netlify.toml` sets the build command (`npm run build`) and publish directory (`dist`). Point the Netlify site at the branch you want to deploy. The contact form uses Netlify Forms; submissions show up under **Forms** in the Netlify dashboard once the site has been deployed.
+`netlify.toml` sets the build command (`npm run build`) and publish directory (`dist`). Point the Netlify site at the branch you want to deploy.
+
+### Contact form (Netlify Forms, free)
+
+Form submissions are free and unlimited on Netlify's credit-based plans, including Free. One-time setup:
+
+1. In the Netlify dashboard, open the site → **Forms** → **Enable form detection**, then redeploy.
+2. **Forms → Submission notifications** → add an email notification to your address.
+3. Submit a test message on the live site and check it appears under **Forms → contact**.
+
+Notification emails come from `formresponses@netlify.com`; hitting Reply goes to the sender, because the form has an `email` field. The form doesn't send from `npm run dev`; it only works on a Netlify deploy (it shows a "please email me" fallback locally).

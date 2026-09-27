@@ -298,3 +298,9 @@ ol.journey,ul.tags{list-style:none;}
 .case.feature .diagram{padding:18px 20px;}
 .case.feature .dar{height:14px;}
 .case.feature .dn{padding:7px 14px;}
+/* contact form result */
+.send{display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
+.form-status{font-size:.88rem;color:var(--muted);}
+.form-status.ok{color:var(--accent);}
+.form-status.err{color:var(--amber);}
+.btn:disabled{opacity:.7;cursor:progress;transform:none;}
